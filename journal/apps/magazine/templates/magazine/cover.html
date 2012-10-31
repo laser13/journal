@@ -1,0 +1,19 @@
+{% extends "magazine/base.html" %}
+
+{% block head_title %}{{ cover.get_type_display }} номера {{ cover.number.get_name }}{% endblock %}
+{% block head_meta_title %}{{ cover.get_type_display }} номера {{ cover.number.get_name }}{% endblock %}
+{% block head_desc %}{{ cover.note|truncatechars:"200" }}{% endblock %}
+
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li><a href="/">Список номеров</a> <span class="divider">/</span></li>
+        <li><a href="{{ cover.number.get_absolute_url }}">{{ cover.number.name }}</a> <span class="divider">/</span></li>
+        <li>{{ cover.get_type_display }}</li>
+    </ul>
+
+    <img src="{{ MEDIA_URL }}{{ cover.image }}" alt="{{ cover.note }}" class="img-polaroid">
+
+    <p>{{ cover.note }}</p>
+
+{% endblock %}

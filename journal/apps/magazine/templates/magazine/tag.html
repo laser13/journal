@@ -1,0 +1,43 @@
+{% extends "magazine/base.html" %}
+
+{% block head_title %}{{ tag.name }}{% endblock %}
+{% block head_meta_title %}{{ tag.name }}{% endblock %}
+{% block head_keyword %}{% for article in articles|slice:"0:7" %}{{ article.title }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endblock %}
+{% block head_desc %}{% for article in articles %}{{ article.title }} {% endfor %}{% endblock %}
+
+{% block content %}
+
+    <h1>{{ tag.name }}</h1>
+
+    <div>
+
+    <h3>Подходящие статьи:</h3>
+
+    <ul>
+    {% for article in articles %}
+        <li>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+
+            {% if article.text_set.all|length > 1 %}
+            <small>стр.:[
+            {% for text in article.text_set.all %}
+                <a href="{% url "text.show" text.article.pk forloop.counter0 %}">{{ forloop.counter }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            ]</small>
+            {% endif %}
+
+            {% if article.articleimage_set.all|length > 0 %}
+            <small>рис.:[
+                {% for image in article.articleimage_set.all %}
+                    <a href="{% url "image.show" image.pk %}">{{ forloop.counter }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            ]</small>
+            {%  endif %}
+            <span class="pull-right">{{ article.page }}</span>
+        </li>
+    {% endfor %}
+    </ul>
+
+    </div>
+
+{% endblock %}

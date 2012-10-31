@@ -1,0 +1,34 @@
+{% extends "magazine/base.html" %}
+
+{% load tagging_tags %}
+
+{% block head_title %}Рисунок из статьи {{ image.article.title }}{% endblock %}
+{% block head_meta_title %}Рисунок из статьи {{ image.article.title }}{% endblock %}
+{% block head_keyword %}{% tags_for_object image.article as tag_list %}{% for tag in tag_list %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endblock %}
+{% block head_desc %}{{ image.note|truncatechars:"200" }}{% endblock %}
+
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li><a href="/">Список номеров</a> <span class="divider">/</span></li>
+        <li><a href="{{ image.article.number.get_absolute_url }}">{{ image.article.journal.title }} ({{ image.article.number.number }} за {{ image.article.number.year }} год)</a> <span class="divider">/</span></li>
+        <li><a href="{{ image.article.rubric.get_absolute_url }}">{{ image.article.rubric.title }}</a> <span class="divider">/</span></li>
+        <li class="active"><a href="{{ image.article.get_absolute_url }}">{{ image.article.title }}</a></li>
+    </ul>
+
+    <img src="{{ MEDIA_URL }}{{ image.image }}" alt="" class="img-polaroid">
+    <p>{{ image.note }}</p>
+
+    <div class="well">
+        <span class="pull-right badge badge-info">{{ image.cnt_view }}</span>
+        {% tags_for_object image.article as tag_list %}
+        {% if tag_list|length > 0 %}
+            <div>
+                {% for tag in tag_list %}
+                    <a href="{% url "tag.show" tag.pk %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -2,3 +2,10 @@
 *.pot
 *.pyc
 local_settings.py
+.idea
+/db
+media/*
+!.gitkeep
+static/*
+!.gitkeep
+

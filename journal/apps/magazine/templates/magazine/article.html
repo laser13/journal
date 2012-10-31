@@ -1,0 +1,92 @@
+{% extends "magazine/base.html" %}
+
+{% load thumbnail %}
+{% load tagging_tags %}
+
+{% tags_for_object article as tag_list %}
+
+{% block head_title %}{{ article.title }} - {{ article.number.get_name }}{% endblock %}
+{% block head_meta_title %}{{ article.title }} - {{ article.number.get_name }}{% endblock %}
+{% block head_keyword %}{% tags_for_object article as tag_list %}{% for tag in tag_list %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endblock %}
+{% block head_desc %}{{ article.first_text|truncatechars:"200"|safe }}{% endblock %}
+
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li><a href="/">Список номеров</a> <span class="divider">/</span></li>
+        <li><a href="{{ article.number.get_absolute_url }}">{{ article.journal.title }} ({{ article.number.number }} за {{ article.number.year }} год)</a> <span class="divider">/</span></li>
+        <li><a href="{{ article.rubric.get_absolute_url }}">{{ article.rubric.title }}</a> <span class="divider">/</span></li>
+        <li class="active">{{ article.title }}</li>
+    </ul>
+
+    <h1>{{ article.title }}</h1>
+
+    <p class="page-text">{{ text.text|safe }}</p>
+
+    <div class="well">
+        {% if article.author %}<span class="text-success"><b>Автор:</b> {{ article.author }}</span><br>{% endif %}
+        {% if article.source %}<span class="text-success"><b>Источник:</b> {{ article.source }}</span>{% endif %}
+        <span class="pull-right badge badge-info">{{ article.cnt_view }}</span>
+
+        {% tags_for_object article as tag_list %}
+        {% if tag_list|length > 0 %}
+            <div>
+            {% for tag in tag_list %}
+                <a href="{% url "tag.show" tag.pk %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if article.text_set.all|length > 1 %}
+        <div class="pagination">
+            <ul>
+                {% for text in article.text_set.all %}
+                    {% if page == forloop.counter0 %}
+                        <li id="id-active-page"
+                            class="active"
+                            data-next-url="{% if next %}{% url "text.show" article.pk next %}{% endif %}"
+                            data-prev-url="{% if prev >= 0 %}{% url "text.show" article.pk prev %}{% endif %}"
+                        ><span>{{ forloop.counter }}</span></li>
+                    {% else %}
+                        <li><a href="{% url "text.show" article.pk forloop.counter0 %}">{{ forloop.counter }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var next_url = $('#id-active-page').data('next-url');
+                var prev_url = $('#id-active-page').data('prev-url');
+                $(document).keydown(function(e) {
+                    if (e.keyCode == 39 && next_url) {
+                        document.location = next_url;
+                    }
+                    if (e.keyCode == 37 && prev_url) {
+                        document.location = prev_url;
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+
+    {% if article.articleimage_set.all|length %}
+    <ul class="thumbnails">
+    {% for item in article.articleimage_set.all %}
+        {% thumbnail item.image "280x190" crop="center" as im %}
+            <li class="">
+                <a class="thumbnail" href="{{ item.get_absolute_url }}" style="text-decoration: none;">
+                <div>
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="">
+                    <p class="text-info"><small>{{ item.note|truncatechars:"45" }}</small></p>
+                </div>
+                </a>
+            </li>
+        {% endthumbnail %}
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+
+
+{% endblock %}
