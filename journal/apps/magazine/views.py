@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 __author__ = 'Pavlenov Semen'
 
-from django.shortcuts import render_to_response, get_object_or_404, render, redirect
-
+from django.shortcuts import get_object_or_404, render
+from django.db.models import F
 from models import Number, Article, Journal, ArticleImage, Rubric, NumberCover
 from tagging.models import Tag, TaggedItem
 
@@ -28,6 +28,9 @@ def article(request, article_id, page=0):
 
     page = int(page)
     article = Article.objects.get(pk=article_id)
+
+    Article.objects.filter(pk=article_id).update(cnt_view=F('cnt_view') + 1)
+
     text = article.text_set.all()[page]
     count = article.text_set.count() - 1
 
@@ -44,6 +47,7 @@ def article(request, article_id, page=0):
 def image(request, image_id):
 
     image = ArticleImage.objects.get(pk=image_id)
+    ArticleImage.objects.filter(pk=image_id).update(cnt_view=F('cnt_view') + 1)
 
     return render(request, 'magazine/image.html', locals())
 
