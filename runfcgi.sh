@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /home/laser13/virtualenvs/journal/bin/activate
+
 PROJDIR="/usr/local/www/django/journal"
 PIDFILE="$PROJDIR/journal.pid"
 SOCKET="$PROJDIR/journal.sock"
@@ -10,7 +12,7 @@ if [ -f $PIDFILE ]; then
     rm -f -- $PIDFILE
 fi
 
-python manage.py runfcgi socket=$SOCKET method=prefork daemonize=true pidfile=$PIDFILE
+python manage.py runfcgi socket=$SOCKET pidfile=$PIDFILE method=prefork daemonize=true
 
 chmod 0777 $SOCKET
 
