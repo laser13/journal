@@ -1,10 +1,8 @@
 #!/bin/bash
 
-source /home/laser13/virtualenvs/journal/bin/activate
-
 PROJDIR="/usr/local/www/django/journal"
-PIDFILE="$PROJDIR/journal.pid"
-SOCKET="$PROJDIR/journal.sock"
+PIDFILE="$PROJDIR//nginx/journal.pid"
+SOCKET="$PROJDIR/nginx/journal.sock"
 
 cd $PROJDIR
 if [ -f $PIDFILE ]; then
@@ -12,8 +10,8 @@ if [ -f $PIDFILE ]; then
     rm -f -- $PIDFILE
 fi
 
+source /home/laser13/virtualenvs/journal/bin/activate
 python manage.py runfcgi socket=$SOCKET pidfile=$PIDFILE method=prefork daemonize=true
-
 chmod 0777 $SOCKET
 
 echo 'Готово!'

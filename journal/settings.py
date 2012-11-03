@@ -165,6 +165,9 @@ LOGGING = {
 
 MAX_TAG_LENGTH = 64
 
+# Теперь sorl thumbnail будет работать с редис
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+
 try:
     from local_settings import *
 except ImportError:
