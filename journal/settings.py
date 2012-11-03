@@ -163,6 +163,13 @@ LOGGING = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_PATH, 'django_cache'),
+        }
+}
+
 MAX_TAG_LENGTH = 64
 
 # Теперь sorl thumbnail будет работать с редис

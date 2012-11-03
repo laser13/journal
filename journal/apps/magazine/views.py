@@ -2,10 +2,12 @@
 __author__ = 'Pavlenov Semen'
 
 from django.shortcuts import get_object_or_404, render
+from django.views.decorators.cache import cache_page
 from django.db.models import F
 from models import Number, Article, Journal, ArticleImage, Rubric, NumberCover
 from tagging.models import Tag, TaggedItem
 
+@cache_page(60 * 24)
 def index(request):
 
     numbers = Number.objects.all().select_related().prefetch_related()
