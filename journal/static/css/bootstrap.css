@@ -5772,17 +5772,3 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
-
-.page-text {
-    -moz-column-count: 2;
-    -moz-column-gap: 2em;
-    -moz-column-rule: 1px solid #eee;
-
-    -webkit-column-count: 2;
-    -webkit-column-gap: 2em;
-    -webkit-column-rule: 1px solid #eee;
-
-    column-count: 2;
-    column-gap: 2em;
-    column-rule: 1px solid #eee;
-}
