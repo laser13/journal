@@ -7,28 +7,32 @@
     <div class="row">
     {% for number in numbers %}
 
-        <div class="span6">
+        <div class="span10">
             <h3><a href="{{ number.get_absolute_url }}">Номер {{ number.number }} за {{ number.year }} год</a></h3>
 
             <ul class="thumbnails">
                 {% for cover in number.numbercover_set.all %}
-                    {% thumbnail cover.image "x200" crop="center" as im %}
+                    {% thumbnail cover.image "x245" crop="center" as im %}
                         <li class="span2"><a class="thumbnail" href="{{ cover.get_absolute_url }}" title="{{ cover.note }}"><img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ cover.note }}"></a></li>
                     {% endthumbnail %}
                 {% endfor %}
             </ul>
 
-                <p class="alert alert-info">
-                    <small>
-                        <span>Оглавление:</span>
+            <p class="alert alert-info">
+                <small>
+                    <span>Оглавление:</span>
+                    <ul>
                         {% for article in number.article_set.all %}
-                            <a title="{{ article.title }}" href="{{ article.get_absolute_url }}">{{ article.page }}</a>{% if not forloop.last %}, {% endif %}
+                            <li>
+                                <a href="{{ article.get_absolute_url }}">
+                                    {{ article.title }}
+                                    <span class="badge badge-info pull-right">стр.:&nbsp;{{ article.page }}</span>&nbsp;
+                                </a>
+                            </li>
                         {% endfor %}
-                    </small>
-                </p>
-
-                <p><small>{{ number.numbercover_set.all.0.note|linebreaksbr }}</small></p>
-                <p><small>{{ number.numbercover_set.all.1.note|linebreaksbr }}</small></p>
+                    </ul>
+                </small>
+            </p>
         </div>
 
     {% endfor %}

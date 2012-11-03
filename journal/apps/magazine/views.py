@@ -10,7 +10,7 @@ from tagging.models import Tag, TaggedItem
 @cache_page(60 * 24)
 def index(request):
 
-    numbers = Number.objects.all().select_related().prefetch_related()
+    numbers = Number.objects.all().select_related()
 
     return render(request, 'magazine/index.html', locals())
 
