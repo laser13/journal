@@ -32,7 +32,6 @@ class Number(models.Model):
     def get_absolute_url(self):
         return ('number.show', (), {'number_id':self.pk})
 
-
     def get_random_article(self):
         return self.article_number.all()[0]
 

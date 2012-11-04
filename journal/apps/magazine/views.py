@@ -2,8 +2,8 @@
 __author__ = 'Pavlenov Semen'
 
 from django.shortcuts import get_object_or_404, render
-from django.views.decorators.cache import cache_page
 from django.db.models import F
+from django.views.decorators.cache import cache_page
 from models import Number, Article, Journal, ArticleImage, Rubric, NumberCover
 from tagging.models import Tag, TaggedItem
 
@@ -16,7 +16,7 @@ def index(request):
 
 def number(request, number_id):
 
-    number = Number.objects.get(pk=number_id)
+    number = get_object_or_404(Number, pk=number_id)
 
     return render(request, 'magazine/number.html', locals())
 
@@ -29,8 +29,7 @@ def rubric(request, rubric_id):
 def article(request, article_id, page=0):
 
     page = int(page)
-    article = Article.objects.get(pk=article_id)
-
+    article = get_object_or_404(Article, pk=article_id)
     Article.objects.filter(pk=article_id).update(cnt_view=F('cnt_view') + 1)
 
     text = article.text_set.all()[page]
@@ -48,7 +47,7 @@ def article(request, article_id, page=0):
 
 def image(request, image_id):
 
-    image = ArticleImage.objects.get(pk=image_id)
+    image = get_object_or_404(ArticleImage, pk=image_id)
     ArticleImage.objects.filter(pk=image_id).update(cnt_view=F('cnt_view') + 1)
 
     return render(request, 'magazine/image.html', locals())
